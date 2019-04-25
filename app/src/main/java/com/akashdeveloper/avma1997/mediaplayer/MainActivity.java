@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,15 +21,20 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Audio> audioList;
     private MediaPlayerService player;
     boolean serviceBound = false;
+    RecyclerView recyclerView;
+    SongsAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        playAudio("https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg");
-        //loadAudio();
+        audioList=new ArrayList<>();
+        adapter= new SongsAdapter();
+        //playAudio("https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg");
+        loadAudio();
 //play the first audio in the ArrayList
-        //playAudio(audioList.get(0).getData());
+        playAudio(audioList.get(0).getData());
     }
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean("ServiceState", serviceBound);
