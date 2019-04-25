@@ -15,12 +15,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Start the service
     public void startService(View view) {
-        startService(new Intent(this, MyService.class));
+        startService(new Intent(this, MediaPlayerService.class));
     }
 
     // Stop the service
     public void stopService(View view) {
-        stopService(new Intent(this, MyService.class));
+        stopService(new Intent(this, MediaPlayerService.class));
     }
 }
 
