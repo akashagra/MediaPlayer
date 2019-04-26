@@ -20,13 +20,14 @@ public class StorageUtil {
         }
 
         public void storeAudio(ArrayList<Audio> arrayList) {
-            preferences = context.getSharedPreferences(STORAGE, Context.MODE_PRIVATE);
 
+            preferences = context.getSharedPreferences(STORAGE, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             Gson gson = new Gson();
             String json = gson.toJson(arrayList);
             editor.putString("audioArrayList", json);
             editor.apply();
+
         }
 
         public ArrayList<Audio> loadAudio() {
@@ -55,6 +56,7 @@ public class StorageUtil {
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             editor.commit();
+
         }
     }
 

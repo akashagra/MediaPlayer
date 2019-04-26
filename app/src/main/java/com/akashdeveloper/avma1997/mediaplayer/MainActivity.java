@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     SongsAdapter adapter;
     DividerItemDecoration decoration;
+    public static final String Broadcast_PLAY_NEW_AUDIO = "com.akashdeveloper.avma1997.PlayNewAudio";
 
 
     @Override
@@ -100,18 +101,40 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
-        private void playAudio(String media) {
+//        private void playAudio(String media) {
             //Check is service is active
-            if (!serviceBound) {
-                Intent playerIntent = new Intent(this, MediaPlayerService.class);
-                playerIntent.putExtra("media", media);
-                startService(playerIntent);
-                bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-            } else {
-                //Service is active
-                //Send media with BroadcastReceiver
+//            if (!serviceBound) {
+//                Intent playerIntent = new Intent(this, MediaPlayerService.class);
+//                playerIntent.putExtra("media", media);
+//                startService(playerIntent);
+//                bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+//            } else {
+//                //Service is active
+//                //Send media with BroadcastReceiver
+//            }
+            private void playAudio(int audioIndex) {
+                //Check is service is active
+                if (!serviceBound) {
+                    //Store Serializable audioList to SharedPreferences
+                    StorageUtil storage = new StorageUtil(getApplicationContext());
+                    storage.storeAudio(audioList);
+                    storage.storeAudioIndex(audioIndex);
+
+                    Intent playerIntent = new Intent(this, MediaPlayerService.class);
+                    startService(playerIntent);
+                    bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+                } else {
+                    //Store the new audioIndex to SharedPreferences
+                    StorageUtil storage = new StorageUtil(getApplicationContext());
+                    storage.storeAudioIndex(audioIndex);
+
+                    //Service is active
+                    //Send a broadcast to the service -> PLAY_NEW_AUDIO
+                    Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
+                    sendBroadcast(broadcastIntent);
+                }
             }
-        }
+
     private void loadAudio() {
         ContentResolver contentResolver = getContentResolver();
 
