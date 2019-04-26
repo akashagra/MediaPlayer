@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,11 +33,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerView=findViewById(R.id.songs_recycler_view);
         audioList=new ArrayList<>();
+
         adapter= new SongsAdapter(this,audioList, new SongsAdapter.SongsClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                loadAudio();
+
                 playAudio(audioList.get(position).getData());
             }
         });
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(decoration);
+        loadAudio();
 
     }
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -117,19 +121,21 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = contentResolver.query(uri, null, selection, null, sortOrder);
 
         if (cursor != null && cursor.getCount() > 0) {
-            audioList = new ArrayList<>();
             while (cursor.moveToNext()) {
                 String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                 String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
                 String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                 String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                Log.d("songs",title);
 
                 // Save to audioList
                 audioList.add(new Audio(data, title, album, artist));
-                adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
             }
         }
         cursor.close();
+
+        adapter.notifyDataSetChanged();
     }
 
 

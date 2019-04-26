@@ -3,6 +3,7 @@ package com.akashdeveloper.avma1997.mediaplayer;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
     public void onBindViewHolder(@NonNull SongsViewHolder songsViewHolder, int position) {
 
         songsViewHolder.title_tv.setText(audioList.get(position).getTitle());
+        Log.i("music",audioList.get(position).getTitle());
         songsViewHolder.album_tv.setText(audioList.get(position).getAlbum());
         songsViewHolder.artist_tv.setText(audioList.get(position).getArtist());
 
