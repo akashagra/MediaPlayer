@@ -11,6 +11,8 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     boolean serviceBound = false;
     RecyclerView recyclerView;
     SongsAdapter adapter;
+    DividerItemDecoration decoration;
 
 
     @Override
@@ -30,11 +33,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         audioList=new ArrayList<>();
-        adapter= new SongsAdapter();
-        //playAudio("https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg");
-        loadAudio();
-//play the first audio in the ArrayList
-        playAudio(audioList.get(0).getData());
+        adapter= new SongsAdapter(this,audioList, new SongsAdapter.SongsClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                loadAudio();
+                playAudio(audioList.get(position).getData());
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(decoration);
+
     }
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean("ServiceState", serviceBound);
@@ -116,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Save to audioList
                 audioList.add(new Audio(data, title, album, artist));
+                adapter.notifyDataSetChanged();
             }
         }
         cursor.close();
