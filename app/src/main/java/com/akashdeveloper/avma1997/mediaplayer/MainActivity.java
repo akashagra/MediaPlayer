@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
 
-                playAudio(audioList.get(position).getData());
+                playAudio(position);
             }
         });
         recyclerView.setAdapter(adapter);
