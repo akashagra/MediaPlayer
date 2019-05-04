@@ -32,9 +32,7 @@ import android.support.v4.media.app.NotificationCompat.MediaStyle;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Valdio Veliu on 16-07-11.
- */
+
 public class MediaPlayerService extends Service implements MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
         MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,

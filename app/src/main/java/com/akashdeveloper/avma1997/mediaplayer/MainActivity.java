@@ -231,10 +231,10 @@ public class MainActivity extends AppCompatActivity {
                     StorageUtil storage = new StorageUtil(getApplicationContext());
                     storage.storeAudio(audioList);
                     storage.storeAudioIndex(audioIndex);
-
                     Intent playerIntent = new Intent(this, MediaPlayerService.class);
                     startService(playerIntent);
                     bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+
                 } else {
                     //Store the new audioIndex to SharedPreferences
                     StorageUtil storage = new StorageUtil(getApplicationContext());
