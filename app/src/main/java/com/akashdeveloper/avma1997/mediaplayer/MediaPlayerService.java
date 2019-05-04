@@ -75,10 +75,14 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         // through its MediaSessionCompat.Callback.
         mediaSession.setFlags(MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
+
         //Set mediaSession's MetaData
         updateMetaData();
 //        buildNotification(PlaybackStatus.PLAYING);
 //        Log.i("ban","notification build successful");
+
+//        buildNotification(PlaybackStatus.PLAYING);
+
 
         // Attach Callback to receive MediaSession updates
         mediaSession.setCallback(new MediaSession.Callback() {
@@ -185,11 +189,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             //create the play action
             play_pauseAction = playbackAction(0);
         }
+        Log.i("salman","coming here");
 
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
                 R.drawable.image); //replace with your own image
         // Create a new Notification
-        Notification.Builder notificationBuilder = (Notification.Builder) new Notification.Builder (this)
+        Notification.Builder notificationBuilder = new Notification.Builder (this)
                 .setShowWhen(false)
                 .setStyle( new Notification.MediaStyle()
                 .setMediaSession(mediaSession.getSessionToken())
