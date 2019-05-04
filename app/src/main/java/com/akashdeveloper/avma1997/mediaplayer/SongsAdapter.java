@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
 
     public static class SongsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title_tv, album_tv, artist_tv;
+        ImageView play_pause;
         SongsClickListener mClickListener;
 
 
@@ -63,6 +65,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
             title_tv = itemView.findViewById(R.id.title_tv_song);
             album_tv = itemView.findViewById(R.id.album_tv_song);
             artist_tv = itemView.findViewById(R.id.artist_tv_song);
+            play_pause=itemView.findViewById(R.id.play_pause_iv);
         }
 
         @Override

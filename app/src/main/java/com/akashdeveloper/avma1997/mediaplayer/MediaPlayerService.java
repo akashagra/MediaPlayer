@@ -77,6 +77,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 
         //Set mediaSession's MetaData
         updateMetaData();
+//        buildNotification(PlaybackStatus.PLAYING);
+//        Log.i("ban","notification build successful");
 
         // Attach Callback to receive MediaSession updates
         mediaSession.setCallback(new MediaSession.Callback() {
@@ -86,6 +88,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
                 super.onPlay();
                 resumeMedia();
                 buildNotification(PlaybackStatus.PLAYING);
+                Log.i("ban","notification build successful");
             }
 
             @Override
@@ -512,6 +515,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 
         if (mediaSessionManager == null) {
             try {
+                //Log.i("shahrukh","init_media_session_called");
                 initMediaSession();
                 initMediaPlayer();
             } catch (RemoteException e) {
