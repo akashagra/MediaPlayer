@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(decoration);
+//        decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+//        recyclerView.addItemDecoration(decoration);
         if(grantPermission())
         loadAudio();
 

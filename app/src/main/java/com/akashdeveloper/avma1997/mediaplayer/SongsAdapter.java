@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,14 +29,58 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SongsViewHolder songsViewHolder, int position) {
+    public void onBindViewHolder(@NonNull final SongsViewHolder songsViewHolder, int position) {
 
         songsViewHolder.title_tv.setText(audioList.get(position).getTitle());
         Log.i("music",audioList.get(position).getTitle());
         songsViewHolder.album_tv.setText(audioList.get(position).getAlbum());
         songsViewHolder.artist_tv.setText(audioList.get(position).getArtist());
+        songsViewHolder.buttonViewOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                //creating a popup menu
+                PopupMenu popup = new PopupMenu(mContext, songsViewHolder.buttonViewOptions);
+                //inflating menu from xml resource
+                popup.inflate(R.menu.options_menu);
+                //adding click listener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu1:
+                                //handle menu1 click
+                                break;
+                            case R.id.menu2:
+                                //handle menu2 click
+                                break;
+                            case R.id.menu3:
+                                //handle menu3 click
+                                break;
+                            case R.id.menu4:
+                                // handle menu4 click
+                                break;
+                            case R.id.menu5:
+                                //handle menu5 click
+                                break;
+                            case R.id.menu6:
+
+                                break;
+                            case R.id.menu7:
+
+                                break;
+
+                        }
+                        return false;
+                    }
+                });
+                //displaying the popup
+                popup.show();
+
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -54,6 +100,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
 
     public static class SongsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title_tv, album_tv, artist_tv;
+        TextView buttonViewOptions;
         ImageView play_pause;
         SongsClickListener mClickListener;
 
@@ -66,6 +113,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
             album_tv = itemView.findViewById(R.id.album_tv_song);
             artist_tv = itemView.findViewById(R.id.artist_tv_song);
             play_pause=itemView.findViewById(R.id.play_pause_iv);
+            buttonViewOptions=itemView.findViewById(R.id.textViewOptions);
         }
 
         @Override

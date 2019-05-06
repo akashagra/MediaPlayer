@@ -5,6 +5,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/songs_recycler_view"
         android:layout_width="match_parent"
+        android:background="#800080"
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
