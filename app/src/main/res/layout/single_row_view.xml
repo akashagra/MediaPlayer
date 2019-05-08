@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"/>
             <TextView
+
                 android:id="@+id/textViewOptions"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"

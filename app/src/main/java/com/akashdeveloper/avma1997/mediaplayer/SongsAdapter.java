@@ -29,7 +29,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final SongsViewHolder songsViewHolder, int position) {
+    public void onBindViewHolder(@NonNull final SongsViewHolder songsViewHolder, final int position) {
 
         songsViewHolder.title_tv.setText(audioList.get(position).getTitle());
         Log.i("music",audioList.get(position).getTitle());
@@ -37,48 +37,11 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
         songsViewHolder.artist_tv.setText(audioList.get(position).getArtist());
         songsViewHolder.buttonViewOptions.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                //creating a popup menu
-                PopupMenu popup = new PopupMenu(mContext, songsViewHolder.buttonViewOptions);
-                //inflating menu from xml resource
-                popup.inflate(R.menu.options_menu);
-                //adding click listener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.menu1:
-                                //handle menu1 click
-                                break;
-                            case R.id.menu2:
-                                //handle menu2 click
-                                break;
-                            case R.id.menu3:
-                                //handle menu3 click
-                                break;
-                            case R.id.menu4:
-                                // handle menu4 click
-                                break;
-                            case R.id.menu5:
-                                //handle menu5 click
-                                break;
-                            case R.id.menu6:
-
-                                break;
-                            case R.id.menu7:
-
-                                break;
-
-                        }
-                        return false;
-                    }
-                });
-                //displaying the popup
-                popup.show();
-
+            public void onClick(View v) {
+                songsViewHolder.mClickListener.onItemClick(v,position);
             }
         });
+
     }
 
 
@@ -89,6 +52,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
 
     public interface SongsClickListener {
         void onItemClick(View view, int position);
+       // void onTextItemClick(View view,int position);
     }
 
     public SongsAdapter( Context mContext,ArrayList<Audio> audioList, SongsClickListener mListener) {
@@ -114,6 +78,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
             artist_tv = itemView.findViewById(R.id.artist_tv_song);
             play_pause=itemView.findViewById(R.id.play_pause_iv);
             buttonViewOptions=itemView.findViewById(R.id.textViewOptions);
+
         }
 
         @Override
@@ -122,10 +87,13 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
             int id = view.getId();
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                if (id == R.id.song_view) {
+
+                 if (id == R.id.song_view) {
                     mClickListener.onItemClick(view, position);
 
                 }
+
+
 
 
             }
