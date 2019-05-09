@@ -2,17 +2,16 @@
 <resources>
     <array name="icons">
         <item>@drawable/play_pause</item>
-        <item>@drawable/image</item>
-        <item>@drawable/play_pause</item>
-        <item>@drawable/play_pause</item>
-        <item>@drawable/play_pause</item>
+        <item>@drawable/love</item>
+        <item>@drawable/settings</item>
+        <item>@drawable/contact</item>
     </array>
     <array name="colors">
         <item>@android:color/holo_blue_light</item>
         <item>@android:color/holo_green_dark</item>
         <item>@android:color/holo_red_light</item>
         <item>@android:color/holo_purple</item>
-        <item>@android:color/holo_orange_light</item>
+
     </array>
 
 

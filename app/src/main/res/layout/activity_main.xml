@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:theme="@style/Theme.AppCompat"
-    tools:context="com.akashdeveloper.avma1997.mediaplayer.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.ramotion.circlemenu.CircleMenuView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:button_colors="@array/colors"
-        app:button_icons="@array/icons"
 
-        android:id="@+id/circle_menu">
-    </com.ramotion.circlemenu.CircleMenuView>
 
     <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/songs_recycler_view"
     android:layout_width="match_parent"
     android:background="#800080"
     android:layout_height="match_parent"/>
+
+    <com.ramotion.circlemenu.CircleMenuView
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:button_colors="@array/colors"
+        app:button_icons="@array/icons"
+        android:id="@+id/circle_menu">
+    </com.ramotion.circlemenu.CircleMenuView>
 
 
     <!--<android.support.design.widget.AppBarLayout-->
@@ -56,7 +53,7 @@
         <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>
 
 
     <!--</android.support.v7.widget.RecyclerView>-->
