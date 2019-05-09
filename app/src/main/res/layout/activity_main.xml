@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +11,16 @@
     android:theme="@style/Theme.AppCompat"
     tools:context="com.akashdeveloper.avma1997.mediaplayer.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <com.ramotion.circlemenu.CircleMenuView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:button_colors="@array/colors"
+        app:button_icons="@array/icons"
+
+        android:id="@+id/circle_menu">
+    </com.ramotion.circlemenu.CircleMenuView>
+
+    <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/songs_recycler_view"
     android:layout_width="match_parent"
     android:background="#800080"
@@ -47,7 +56,7 @@
         <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
     <!--</android.support.v7.widget.RecyclerView>-->
