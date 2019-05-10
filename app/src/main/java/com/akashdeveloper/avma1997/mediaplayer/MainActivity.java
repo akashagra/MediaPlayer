@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
                                         songViewModel.insert(audioList.get(position));
                                         break;
                                 case R.id.menu4:
-
+                                    audioList.get(position).flag=1;
+                                    songViewModel.insert(audioList.get(position));
                                     break;
                                 case R.id.menu5:
                                     Uri si= Uri.parse(audioList.get(position).getData());
@@ -232,6 +233,20 @@ public class MainActivity extends AppCompatActivity {
 
                      }
                  });
+
+                }
+
+                if(index==1){
+
+                    songViewModel.getAllSongsFavourites().observe(MainActivity.this, new Observer<List<Audio>>() {
+                        @Override
+                        public void onChanged(List<Audio> audio) {
+                            audioList.clear();
+                            audioList.addAll(audio);
+                            adapter.notifyDataSetChanged();
+
+                        }
+                    });
 
                 }
 

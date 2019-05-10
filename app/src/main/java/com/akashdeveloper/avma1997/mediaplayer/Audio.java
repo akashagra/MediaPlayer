@@ -10,11 +10,11 @@ import androidx.room.PrimaryKey;
 public class Audio implements Serializable {
     @PrimaryKey
     private int id;
-
     private String data;
     private String title;
     private String album;
     private String artist;
+    int flag
 
     public Audio(int id,String data, String title, String album, String artist) {
         this.id=id;

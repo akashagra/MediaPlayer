@@ -24,7 +24,12 @@ public interface SongDao {
     @Query("Delete FROM songs_table")
     void deleteAllSongs();
 
-    @Query("Select * from songs_table ")
+    @Query("Select * from songs_table WHERE flag =0")
     LiveData<List<Audio>> getAllSongs();
+
+    @Query("Select * from songs_table WHERE flag =1")
+    LiveData<List<Audio>> getAllSongsFavourites();
+
+
 
 }
