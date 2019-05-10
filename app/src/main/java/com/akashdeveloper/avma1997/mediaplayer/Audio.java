@@ -3,17 +3,21 @@ package com.akashdeveloper.avma1997.mediaplayer;
 import java.io.Serializable;
 
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 
 @Entity(tableName="songs_table")
 public class Audio implements Serializable {
+    @PrimaryKey
+    private int id;
 
     private String data;
     private String title;
     private String album;
     private String artist;
 
-    public Audio(String data, String title, String album, String artist) {
+    public Audio(int id,String data, String title, String album, String artist) {
+        this.id=id;
         this.data = data;
         this.title = title;
         this.album = album;
@@ -50,5 +54,13 @@ public class Audio implements Serializable {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

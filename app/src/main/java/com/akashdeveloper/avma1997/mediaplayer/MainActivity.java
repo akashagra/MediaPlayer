@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +21,9 @@ import androidx.annotation.NonNull;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +43,7 @@ import com.ramotion.circlemenu.CircleMenuView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,10 +53,7 @@ import github.chenupt.springindicator.SpringIndicator;
 import static android.os.Build.VERSION.SDK_INT;
 
 public class MainActivity extends AppCompatActivity {
-    private TabLayout tab;
-
-    private ViewPager mViewPager;
-    SpringIndicator springIndicator;
+    SongViewModel songViewModel;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 0;
     ArrayList<Audio> audioList;
     ArrayList<Audio> playList;
@@ -59,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
     boolean serviceBound = false;
     RecyclerView recyclerView;
     SongsAdapter adapter;
-    DividerItemDecoration decoration;
-    int flag=0;
     public static final String Broadcast_PLAY_NEW_AUDIO = "com.akashdeveloper.avma1997.PlayNewAudio";
 
 
@@ -71,10 +71,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView=findViewById(R.id.songs_recycler_view);
         audioList=new ArrayList<>();
         playList=new ArrayList<>();
+        songViewModel= ViewModelProviders.of(this).get(SongViewModel.class);
 
         adapter= new SongsAdapter(this,audioList, new SongsAdapter.SongsClickListener() {
             @Override
-            public void onItemClick(View view,  final int position) {
+            public void onItemClick(View view,  final int position)  {
                 if (view instanceof TextView) {
                     PopupMenu popup = new PopupMenu(MainActivity.this, view);
                     //inflating menu from xml resource
@@ -96,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     break;
                                 case R.id.menu3:
-                                    playList.add(audioList.get(position));
-                                    break;
+                                        songViewModel.insert(audioList.get(position));
+                                        break;
                                 case R.id.menu4:
 
                                     break;
@@ -220,9 +221,18 @@ public class MainActivity extends AppCompatActivity {
             public void onButtonClickAnimationStart(@NonNull CircleMenuView view, int index) {
 
                 if(index==0){
-                    audioList.clear();
-                    audioList.addAll(playList);
-                    adapter.notifyDataSetChanged();
+
+                 songViewModel.getAllSongs().observe(MainActivity.this, new Observer<List<Audio>>() {
+                     @Override
+                     public void onChanged(List<Audio> audio) {
+                         audioList.clear();
+                         audioList.addAll(audio);
+                         adapter.notifyDataSetChanged();
+
+
+                     }
+                 });
+
                 }
 
                 if(index==4){
@@ -523,6 +533,7 @@ public class MainActivity extends AppCompatActivity {
             if(audioList.size()>0)
             {audioList.clear();}
             while (cursor.moveToNext()) {
+                int id =cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
                 String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                 String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
                 String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
@@ -530,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("songs",title);
 
                 // Save to audioList
-                audioList.add(new Audio(data, title, album, artist));
+                audioList.add(new Audio(id,data, title, album, artist));
                 //adapter.notifyDataSetChanged();
             }
         }
