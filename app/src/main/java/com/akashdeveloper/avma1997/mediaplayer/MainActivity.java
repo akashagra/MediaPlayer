@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     SongsAdapter adapter;
     DividerItemDecoration decoration;
+    int flag=0;
     public static final String Broadcast_PLAY_NEW_AUDIO = "com.akashdeveloper.avma1997.PlayNewAudio";
 
 
@@ -67,15 +68,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//        mViewPager = (ViewPager) findViewById(R.id.container);
-//        mViewPager.setAdapter(mSectionsPagerAdapter);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        tab = (TabLayout) findViewById(R.id.tab);
-//        tab.setupWithViewPager(mViewPager);
-//        springIndicator = findViewById(R.id.indicator);
-//        springIndicator.setViewPager(mViewPager);
         recyclerView=findViewById(R.id.songs_recycler_view);
         audioList=new ArrayList<>();
         playList=new ArrayList<>();
@@ -107,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
                                     playList.add(audioList.get(position));
                                     break;
                                 case R.id.menu4:
+
+                                    break;
+                                case R.id.menu5:
                                     Uri si= Uri.parse(audioList.get(position).getData());
                                     String s = si.getPath();
                                     File k = new File(s);  // set File from path
@@ -144,14 +139,16 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
 
-                                    break;
-                                case R.id.menu5:
                                     //handle menu5 click
                                     break;
                                 case R.id.menu6:
 
                                     break;
                                 case R.id.menu7:
+
+                                    break;
+
+                                case R.id.menu8:
                                     Uri del=Uri.parse(audioList.get(position).getData());
                                     String path= del.getPath();
                                     File file= new File(path);
@@ -165,9 +162,6 @@ public class MainActivity extends AppCompatActivity {
                                         loadAudio();
 
                                     }
-
-
-
                                     break;
 
                             }
@@ -177,9 +171,16 @@ public class MainActivity extends AppCompatActivity {
                     //displaying the popup
                     popup.show();
 
-                } else
-                    playAudio(position);
-            }
+                } else{
+
+                        playAudio(position);
+
+
+
+                    }
+                }
+
+
         });
 
 
@@ -217,7 +218,19 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onButtonClickAnimationStart(@NonNull CircleMenuView view, int index) {
-                Log.d("D", "onButtonClickAnimationStart| index: " + index);
+
+                if(index==0){
+                    audioList.clear();
+                    audioList.addAll(playList);
+                    adapter.notifyDataSetChanged();
+                }
+
+                if(index==4){
+                    loadAudio();
+                }
+
+
+
             }
 
             @Override
@@ -226,7 +239,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
+
         });
+
+
+
+
 
 
 
