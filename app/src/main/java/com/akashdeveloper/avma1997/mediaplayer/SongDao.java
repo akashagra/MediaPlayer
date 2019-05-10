@@ -24,6 +24,6 @@ public interface SongDao {
     void deleteAllSongs();
 
     @Query("Select * from songs_table ")
-    LiveData<List<Audio>> getAllMSongs();
+    LiveData<List<Audio>> getAllSongs();
 
 }
