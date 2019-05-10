@@ -2,6 +2,10 @@ package com.akashdeveloper.avma1997.mediaplayer;
 
 import java.io.Serializable;
 
+import androidx.room.Entity;
+
+
+@Entity(tableName="songs_table")
 public class Audio implements Serializable {
 
     private String data;
