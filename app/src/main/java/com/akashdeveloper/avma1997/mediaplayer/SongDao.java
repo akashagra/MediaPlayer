@@ -12,7 +12,7 @@ import androidx.room.Update;
 
 @Dao
 public interface SongDao {
-     @Insert(onConflict = OnConflictStrategy.REPLACE)
+     @Insert(onConflict = OnConflictStrategy.IGNORE)
      void insert(Audio audio);
 
      @Update
@@ -24,12 +24,9 @@ public interface SongDao {
     @Query("Delete FROM songs_table")
     void deleteAllSongs();
 
-    @Query("Select * from songs_table WHERE flag =0")
-    LiveData<List<Audio>> getAllSongs();
+    @Query("Select * from songs_table WHERE flag =0 GROUP BY id")
+   List<Audio> getAllSongs();
 
-    @Query("Select * from songs_table WHERE flag =1")
-    LiveData<List<Audio>> getAllSongsFavourites();
-
-
-
+    @Query("Select * from songs_table WHERE flag =1 GROUP BY id")
+    List<Audio> getAllSongsFavourites();
 }

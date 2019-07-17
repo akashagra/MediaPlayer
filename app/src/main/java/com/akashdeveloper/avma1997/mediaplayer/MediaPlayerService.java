@@ -38,15 +38,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,
 
         AudioManager.OnAudioFocusChangeListener {
-
-
     public static final String ACTION_PLAY = "com.akashdeveloper.avma1997.mediaplayer.ACTION_PLAY";
     public static final String ACTION_PAUSE = "com.akashdeveloper.avma1997.mediaplayer.ACTION_PAUSE";
     public static final String ACTION_PREVIOUS = "com.akashdeveloper.avma1997.mediaplayer.ACTION_PREVIOUS";
     public static final String ACTION_NEXT = "com.akashdeveloper.avma1997.mediaplayer.ACTION_NEXT";
     public static final String ACTION_STOP = "com.akashdeveloper.avma1997.mediaplayer.ACTION_STOP";
     private static final String CHANNEL_ID = "media_playback_channel";
-
 
     private MediaPlayer mediaPlayer;
 
@@ -72,12 +69,10 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private int audioIndex = -1;
     private Audio activeAudio; //an object on the currently playing audio
 
-
     //Handle incoming phone calls
     private boolean ongoingCall = false;
     private PhoneStateListener phoneStateListener;
     private TelephonyManager telephonyManager;
-
 
     /**
      * Service lifecycle methods
@@ -387,7 +382,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         initMediaPlayer();
     }
 
-
     /**
      * ACTION_AUDIO_BECOMING_NOISY -- change in audio outputs
      */
@@ -414,7 +408,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         //Starting listening for PhoneState changes
         phoneStateListener = new PhoneStateListener() {
-            @Override
+
             public void onCallStateChanged(int state, String incomingNumber) {
                 switch (state) {
                     //if at least one call exists or the phone is ringing
@@ -561,8 +555,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         // Create a new Notification
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, CHANNEL_ID);
-                // Hide the timestamp
-                notificationBuilder.setShowWhen(false)
+        // Hide the timestamp
+        notificationBuilder.setShowWhen(false)
                 // Set the Notification style
                 .setStyle(new MediaStyle()
                         // Attach our MediaSession token

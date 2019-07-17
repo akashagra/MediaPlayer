@@ -47,13 +47,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
-import github.chenupt.springindicator.SpringIndicator;
 
 import static android.os.Build.VERSION.SDK_INT;
 
 public class MainActivity extends AppCompatActivity {
-    SongViewModel songViewModel;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 0;
     ArrayList<Audio> audioList;
     ArrayList<Audio> playList;
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     boolean serviceBound = false;
     RecyclerView recyclerView;
     SongsAdapter adapter;
+    private SongDao songDao;
     public static final String Broadcast_PLAY_NEW_AUDIO = "com.akashdeveloper.avma1997.PlayNewAudio";
 
 
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView=findViewById(R.id.songs_recycler_view);
         audioList=new ArrayList<>();
         playList=new ArrayList<>();
-        songViewModel= ViewModelProviders.of(this).get(SongViewModel.class);
-
+        SongsDatabase db = SongsDatabase.getInstance(this);
+        songDao = db.songDao();
         adapter= new SongsAdapter(this,audioList, new SongsAdapter.SongsClickListener() {
             @Override
             public void onItemClick(View view,  final int position)  {
@@ -97,11 +97,14 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     break;
                                 case R.id.menu3:
-                                        songViewModel.insert(audioList.get(position));
-                                        break;
+                                    Audio audio = audioList.get(position);
+                                    audio.flag=0;
+                                    new insertAsyncTask(songDao).execute(audioList.get(position));
+                                    break;
                                 case R.id.menu4:
-                                    audioList.get(position).flag=1;
-                                    songViewModel.insert(audioList.get(position));
+                                    Audio audio2 = audioList.get(position);
+                                    audio2.flag=1;
+                                    new insertAsyncTask(songDao).execute(audioList.get(position));
                                     break;
                                 case R.id.menu5:
                                     Uri si= Uri.parse(audioList.get(position).getData());
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                                     //handle menu5 click
                                     break;
                                 case R.id.menu6:
+                                    stopAudio(position);
 
                                     break;
                                 case R.id.menu7:
@@ -155,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                                     String path= del.getPath();
                                     File file= new File(path);
                                     if(path!=null){
+
                                         Uri uri = MediaStore.Audio.Media.getContentUriForPath(file
                                                 .getAbsolutePath());
                                         getContentResolver().delete(
@@ -174,13 +179,10 @@ public class MainActivity extends AppCompatActivity {
                     popup.show();
 
                 } else{
+                    playAudio(position);
 
-                        playAudio(position);
-
-
-
-                    }
                 }
+            }
 
 
         });
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 //        decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
 //        recyclerView.addItemDecoration(decoration);
         if(grantPermission())
-        loadAudio();
+            loadAudio();
 
         final CircleMenuView menu = (CircleMenuView) findViewById(R.id.circle_menu);
         menu.setEventListener(new CircleMenuView.EventListener() {
@@ -223,32 +225,49 @@ public class MainActivity extends AppCompatActivity {
 
                 if(index==0){
 
-                 songViewModel.getAllSongs().observe(MainActivity.this, new Observer<List<Audio>>() {
-                     @Override
-                     public void onChanged(List<Audio> audio) {
-                         audioList.clear();
-                         audioList.addAll(audio);
-                         adapter.notifyDataSetChanged();
+                    try {
+                        ArrayList<Audio> audio = new selectAsyncTask(songDao).execute().get();
+                        audioList.clear();
+                        audioList.addAll(audio);
+                        adapter.notifyDataSetChanged();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+//                  ArrayList<Audio> audio = (ArrayList<Audio>) songViewModel.getAllSongs();
 
 
-                     }
-                 });
+//                 songViewModel.getAllSongs().observe(MainActivity.this, new Observer<List<Audio>>() {
+//                     @Override
+//                     public void onChanged(List<Audio> audio) {
+//                         audioList.clear();
+//                         audioList.addAll(audio);
+//                         adapter.notifyDataSetChanged();
+//
+//
+//                     }
+//                 });
 
                 }
 
                 if(index==1){
 
-                    songViewModel.getAllSongsFavourites().observe(MainActivity.this, new Observer<List<Audio>>() {
-                        @Override
-                        public void onChanged(List<Audio> audio) {
-                            audioList.clear();
-                            audioList.addAll(audio);
-                            adapter.notifyDataSetChanged();
-
-                        }
-                    });
+                    try {
+                        ArrayList<Audio> audio = new selectFavAsyncTask(songDao).execute().get();
+                        audioList.clear();
+                        audioList.addAll(audio);
+                        adapter.notifyDataSetChanged();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                 }
+
+
+
 
                 if(index==4){
                     loadAudio();
@@ -387,8 +406,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Map<String, Integer> perms = new HashMap<>();
                 // Initialize the map with both permissions
-                perms.put(android.Manifest.permission.READ_PHONE_STATE, PackageManager.PERMISSION_GRANTED);
                 perms.put(android.Manifest.permission.READ_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+                perms.put(android.Manifest.permission.READ_PHONE_STATE, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE,PackageManager.PERMISSION_GRANTED);
 //                perms.put(Manifest.permission.WRITE_SETTINGS,PackageManager.PERMISSION_GRANTED);
 
@@ -473,17 +492,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Start the service
-//    public void startService(View view) {
-//        startService(new Intent(this, MediaPlayerService.class));
-//    }
-//
-//    // Stop the service
-//    public void stopService(View view) {
-//        stopService(new Intent(this, MediaPlayerService.class));
-//    }
-//}
-
     public ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -491,50 +499,46 @@ public class MainActivity extends AppCompatActivity {
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             player = binder.getService();
             serviceBound = true;
-
             Toast.makeText(MainActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
             serviceBound = false;
 
         }
     };
-//        private void playAudio(String media) {
-            //Check is service is active
-//            if (!serviceBound) {
-//                Intent playerIntent = new Intent(this, MediaPlayerService.class);
-//                playerIntent.putExtra("media", media);
-//                startService(playerIntent);
-//                bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-//            } else {
-//                //Service is active
-//                //Send media with BroadcastReceiver
-//            }
-            private void playAudio(int audioIndex) {
-                //Check is service is active
-                if (!serviceBound) {
-                    //Store Serializable audioList to SharedPreferences
-                    StorageUtil storage = new StorageUtil(getApplicationContext());
-                    storage.storeAudio(audioList);
-                    storage.storeAudioIndex(audioIndex);
-                    Intent playerIntent = new Intent(this, MediaPlayerService.class);
-                    startService(playerIntent);
-                    bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
-                } else {
-                    //Store the new audioIndex to SharedPreferences
-                    StorageUtil storage = new StorageUtil(getApplicationContext());
-                    storage.storeAudioIndex(audioIndex);
+    private void playAudio(int audioIndex) {
+        //Check is service is active
+        if (!serviceBound) {
+            //Store Serializable audioList to SharedPreferences
+            StorageUtil storage = new StorageUtil(getApplicationContext());
+            storage.storeAudio(audioList);
+            storage.storeAudioIndex(audioIndex);
+            Intent playerIntent = new Intent(this, MediaPlayerService.class);
+            startService(playerIntent);
+            bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        } else {
+            //Store the new audioIndex to SharedPreferences
+            StorageUtil storage = new StorageUtil(getApplicationContext());
+            storage.storeAudioIndex(audioIndex);
 
-                    //Service is active
-                    //Send a broadcast to the service -> PLAY_NEW_AUDIO
-                    Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
-                    sendBroadcast(broadcastIntent);
-                }
-            }
+            //Service is active
+            //Send a broadcast to the service -> PLAY_NEW_AUDIO
+            Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
+            sendBroadcast(broadcastIntent);
+        }
+    }
+
+    private void stopAudio(int audioindex) {
+
+        if (serviceBound) {
+            unbindService(serviceConnection);
+            player.stopSelf();
+        }
+    }
+
 
     private void loadAudio() {
         ContentResolver contentResolver = getContentResolver();
@@ -561,10 +565,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         cursor.close();
-
         adapter.notifyDataSetChanged();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
+}
 

@@ -11,7 +11,7 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-@Database(entities = {Audio.class}, version = 1)
+@Database(entities = {Audio.class},version = 1,exportSchema = false)
 public abstract class SongsDatabase extends RoomDatabase {
 
     private static SongsDatabase instance;
@@ -23,7 +23,6 @@ public abstract class SongsDatabase extends RoomDatabase {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     SongsDatabase.class, "songs_database")
                     .fallbackToDestructiveMigration().addCallback(roomCallback).build();
-
         }
         return instance;
     }

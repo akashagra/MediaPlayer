@@ -8,16 +8,21 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName="songs_table")
 public class Audio implements Serializable {
-    @PrimaryKey
+
+
+
+    @PrimaryKey(autoGenerate = true)
+    private int unique_id;
     private int id;
     private String data;
     private String title;
     private String album;
     private String artist;
-    int flag
+    int flag;
 
-    public Audio(int id,String data, String title, String album, String artist) {
-        this.id=id;
+
+    public Audio(int id, String data, String title, String album, String artist) {
+        this.id = id;
         this.data = data;
         this.title = title;
         this.album = album;
@@ -63,4 +68,15 @@ public class Audio implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
+    public int getUnique_id() {
+        return unique_id;
+    }
+
+    public void setUnique_id(int unique_id) {
+        this.unique_id = unique_id;
+    }
+
 }
+
+

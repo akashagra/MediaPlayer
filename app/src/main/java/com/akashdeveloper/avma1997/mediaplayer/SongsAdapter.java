@@ -23,12 +23,10 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
     public SongsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.single_row_view, parent, false);
         return new SongsViewHolder(itemView, mListener);
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull final SongsViewHolder songsViewHolder, final int position) {
-
         songsViewHolder.title_tv.setText(audioList.get(position).getTitle());
         Log.i("music",audioList.get(position).getTitle());
         songsViewHolder.album_tv.setText(audioList.get(position).getAlbum());
@@ -39,7 +37,6 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
                 songsViewHolder.mClickListener.onItemClick(v,position);
             }
         });
-
     }
 
 
@@ -88,11 +85,7 @@ class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
 
                  if (id == R.id.song_view) {
                     mClickListener.onItemClick(view, position);
-
                 }
-
-
-
 
             }
         }
